@@ -33,7 +33,7 @@ describe("Cinema tests", () => {
 
   test("Should order several tickets for Movie tomorrow", async () => {
     await selectDateTime(page, tomorrow, movieTime);
-    await orderTickets(page, 3, 5, 6);
+    await orderTickets(page, 3, 1, 2);
     const actual = await getText(page, ticketHint);
   });
 
@@ -43,7 +43,7 @@ describe("Cinema tests", () => {
     const actual = await getText(page, ticketHint);
   });
 
-  test.only("Check if the place is taken after ordering ", async () => {
+  test("Check if the place is taken after ordering ", async () => {
     let row = 1;
     let seat = 4;
     await selectDateTime(page, weekLater, movieTime);
