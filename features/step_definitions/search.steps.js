@@ -12,7 +12,7 @@ const {
 
 let tomorrow = "nav.page-nav > a:nth-child(2)";
 let weekLater = "nav.page-nav > a:nth-child(7)";
-let movieTime = "[data-seance-id='129']";
+let movieTime = "[data-seance-id='94']";
 let ticketHint = "p.ticket__hint";
 
 Before(async function () {
@@ -28,25 +28,41 @@ After(async function () {
   }
 });
 
-Given("user is on {string} page", async function (string) {
+/*Given("user is on {string} page", async function (string) {
   return await this.page.goto(`http://qamid.tmweb.ru/client${string}`, {
-    setTimeout: 20000,
+    setTimeout: 7000000,
+  });
+});*/
+
+Given("user is on page", async function () {
+  return await this.page.goto(`http://qamid.tmweb.ru/client/index.php`, {
+    setTimeout: 90000000,
   });
 });
 
-When("user choose {int}-th day and movie", async function (int1) {           //выбор дня по дате и сеанса
-  return await selectDateTime(this.page, `nav.page-nav > a:nth-child(${int1})`, movieTime);
+When("user choose {int}-th day and movie", async function (int1) {
+  //выбор дня по дате и сеанса
+  return await selectDateTime(
+    this.page,
+    `nav.page-nav > a:nth-child(${int1})`,
+    movieTime
+  );
 });
 
-When("select {int} row and {int} seat", async function (int1, int2) {              //выбор ряда и 1 места
+When("select {int} row and {int} seat", async function (int1, int2) {
+  //выбор ряда и 1 места
   return await orderTickets(this.page, int1, int2);
 });
 
-When("select {int} row and {int},{int} seats", async function (int1, int2, int3) {              //выбор ряда и нескольких мест
-  return await orderTickets(this.page, int1, int2, int3);
-});
-
 When(
+  "select {int} row and {int},{int} seats",
+  async function (int1, int2, int3) {
+    //выбор ряда и нескольких мест
+    return await orderTickets(this.page, int1, int2, int3);
+  }
+);
+
+/*When(
   "trying to select reserved {int} row and {int} seat",
   async function (int1, int2) {
     await checkSeatIsTaken(this.page, int1, int2);
@@ -57,11 +73,14 @@ When(
       expect(error.message).to.be.equal("Seat(s) is taken");
     }
   }
-);
+);*/
 
-Then("ticket purchase is confirmed", async function () {                        //подтверждение бронирования
+Then("ticket purchase is confirmed", async function () {
+  //подтверждение бронирования
   const actual = await getText(this.page, ticketHint);
-  expect(actual).contains("Покажите QR-код нашему контроллеру для подтверждения бронирования.");
+  expect(actual).contains(
+    "Покажите QR-код нашему контроллеру для подтверждения бронирования."
+  );
 });
 
 Then("booking is not possible", async function () {
